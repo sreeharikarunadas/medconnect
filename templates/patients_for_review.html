@@ -1,0 +1,110 @@
+{% include 'navbar.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center text-white mb-4"><i class="fas fa-user-clock"></i> Patients Awaiting Review</h2>
+
+    {% if patients %}
+    <div class="table-responsive">
+        <table class="table table-hover text-white text-center">
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Age</th>
+                    <th>Referring Doctor</th>
+                    <th>Last Exam</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr>
+                    <td>{{ patient.name }}</td>
+                    <td>{{ patient.age }}</td>
+                    <td>{{ patient.referring_doctor }}</td>
+                    <td>{{ patient.last_exam }}</td>
+                    <td>
+                        {% if patient.status == "pending_review" %}
+                            <span class="badge bg-warning text-dark">Consultation Pending</span>
+                        {% elif patient.status == "consulted" %}
+                            <span class="badge bg-primary">Consulted</span>
+                        {% elif patient.status == "report_generated" %}
+                            <span class="badge bg-success">Report Generated</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Unknown</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('review_patient', patient_id=patient._id) }}" class="btn btn-info btn-sm">
+                            <i class="fas fa-eye"></i> Review
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-center text-white">No patients awaiting review at the moment.</p>
+    {% endif %}
+</div>
+
+<!-- Styles -->
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(to right, #4facfe, #00f2fe);
+        min-height: 100vh;
+    }
+
+    .container {
+        width: 95%;
+        max-width: 1000px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(15px);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    h2 {
+        font-size: 26px;
+        font-weight: 600;
+    }
+
+    table {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    thead {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    th, td {
+        padding: 12px;
+        color: #fff;
+        font-weight: 500;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .btn-info {
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        border: none;
+        transition: all 0.3s;
+    }
+
+    .btn-info:hover {
+        transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+{% endblock %}

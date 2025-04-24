@@ -1,0 +1,192 @@
+{% include 'navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: url("{{ url_for('static', filename='images/signup.webp') }}") no-repeat center center fixed;
+            background-size: cover;
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 50px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+        label {
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #28a745;
+            border: none;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            background-color: #218838;
+        }
+        .input-group {
+            width: 100%; /* Ensures all input fields take full width */
+        }
+        .input-group-text {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+        }
+        #specialization-field {
+            display: none; /* Hide initially */
+            width: 100%; /* Ensures it takes the same width as other fields */
+        }
+    </style>
+    
+</head>
+<body>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="form-container">
+        <h2 class="text-center"><i class="fas fa-user-plus"></i> Signup</h2>
+        <form method="POST">
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" name="username" class="form-control" placeholder="Username" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                <input type="email" name="email" class="form-control" placeholder="Email" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                <input type="text" name="mobile" class="form-control" placeholder="Mobile Number" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                <input type="text" name="address" class="form-control" placeholder="Address" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                <select id="role" name="role" class="form-control" required onchange="toggleSpecialization()">
+                    <option value="patient">Patient</option>
+                    <option value="doctor">Doctor</option>
+                </select>
+            </div>
+
+            <!-- Specialization Field (Hidden by Default) -->
+            <div class="input-group mb-3" id="specialization-field">
+                <span class="input-group-text"><i class="fas fa-stethoscope"></i></span>
+                <input type="text" name="specialization" id="specialization" class="form-control" placeholder="Specialization">
+            </div>
+           
+            <div class="input-group mb-3" id="walletAddressField">
+                <span class="input-group-text"><i class="fas fa-wallet"></i></span>
+                <input type="text" readonly name="walletAddress" class="form-control" placeholder="Wallet Address" id="walletAddress" required>
+            </div>
+            <button type="button"  class="btn btn-primary" id="connectButton">Connect Wallet</button>
+            <button id="signup" style="display: none;" type="submit" class="btn btn-primary">Signup</button>
+        </form>
+        <p class="text-center mt-3">Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+
+        <!-- Toast Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="toast-container position-fixed top-0 end-0 p-3">
+                {% for category, message in messages %}
+                    <div class="toast align-items-center text-white bg-{{ 'success' if category == 'success' else 'danger' }} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                {{ message }}
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        var toastList = toastElList.map(function(toastEl) {
+            return new bootstrap.Toast(toastEl);
+        });
+        toastList.forEach(toast => toast.show());
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.2.0/web3.min.js"></script>
+    <script>
+        const connectButton = document.getElementById("connectButton");
+        let walletAddress = document.getElementById("walletAddress");
+        let signup = document.getElementById("signup");
+
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    // Create a Web3 instance
+                    const web3 = new Web3(window.ethereum);
+
+                    // Request account access
+                    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+                    
+                    // Get the first account
+                    const account = accounts[0];
+
+                    walletAddress.value = account;
+                    connectButton.style.display = "none";
+                    signup.style.display = "block"; // Show the signup button
+                } catch (error) {
+                    console.error(error);
+                    walletAddress.textContent = "Connection failed!";
+                }
+            } else {
+                alert("MetaMask is not installed. Please install MetaMask.");
+            }
+        }
+
+        connectButton.addEventListener("click", connectWallet);
+    </script>
+    <script>
+        function toggleSpecialization() {
+            let role = document.getElementById("role").value;
+            let specializationField = document.getElementById("specialization-field");
+            const connectButton = document.getElementById("connectButton");
+            let signup = document.getElementById("signup");
+            let walletAddressField = document.getElementById("walletAddressField");
+            
+            if (role === "doctor") {
+                specializationField.style.display = "flex"; // Keep flex for alignment
+                connectButton.style.display = "none";
+                walletAddressField.style.display = "none";
+                signup.style.display = "block"; // Show the signup button
+            } else {
+                connectButton.style.display = "block";
+                signup.style.display = "none"; // Show the signup button
+                specializationField.style.display = "none";
+                walletAddressField.style.display = "flex";
+            }
+        }
+
+        // Ensure specialization field remains visible if "Doctor" is selected after a page reload
+        window.onload = function () {
+            toggleSpecialization();
+        };
+    </script>
+</body>
+</html>

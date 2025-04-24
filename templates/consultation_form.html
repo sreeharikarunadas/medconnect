@@ -1,0 +1,321 @@
+{% include 'navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultation Form</title>
+
+    <!-- Bootstrap & FontAwesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 80px;
+            /* Space for navbar */
+        }
+
+        /* Navbar Fix */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+        }
+
+        /* Glassmorphic Form Container */
+        .form-container {
+            width: 90%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-in-out;
+            margin-top: 20px;
+            /* Prevents navbar overlap */
+        }
+
+        /* Form Title */
+        .form-container h1 {
+            font-size: 26px;
+            font-weight: 600;
+            text-align: center;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        /* Labels */
+        label {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* Input Fields */
+        .form-control,
+        .form-select {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #4facfe;
+            box-shadow: 0 0 8px rgba(79, 172, 254, 0.5);
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: #fff;
+            padding: 12px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: scale(1.05);
+        }
+
+        /* Fade-In Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Patient Details Box */
+        .patient-info {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .patient-info h4 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container d-flex align-items-center justify-content-center">
+        <div class="form-container">
+            <h1><i class="fas fa-stethoscope"></i> Consultation Form</h1>
+
+            <!-- Patient Details -->
+            <div class="patient-info">
+                <h4>Patient Information</h4>
+                <p><strong>Name:</strong> {{ patient.name }}</p>
+                <p><strong>Age:</strong> {{ patient.age }}</p>
+                <p><strong>Gender:</strong> {{ patient.gender }}</p>
+                <p><strong>Smoking Status:</strong> {{ smoking_status }}</p>
+                <p><strong>Alcohol Consumption:</strong> {{ alcohol_consumption }}</p>
+            </div>
+
+            <!-- Consultation Form -->
+            <form method="POST" class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Doctor Name:</label>
+                    <input type="text" name="doctor_name" class="form-control" value="{{ session['username'] }}"
+                        readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Hospital Name:</label>
+                    <input type="text" name="hospital_name" class="form-control" placeholder="Enter hospital name"
+                        required>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label">Observations:</label>
+                    <textarea name="observations" class="form-control" rows="5" placeholder="Enter observations"
+                        required></textarea>
+                </div>
+
+                <!-- Health Metrics -->
+                <h4 class="mt-4"><i class="fas fa-heartbeat"></i> Health Metrics</h4>
+
+                <div class="col-md-6">
+                    <label class="form-label">Blood Pressure:</label>
+                    <input type="number" name="blood_pressure" class="form-control" placeholder="Enter blood pressure"
+                        required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Heart Rate:</label>
+                    <input type="number" name="heart_rate" class="form-control" placeholder="Enter heart rate" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Sugar Level:</label>
+                    <input type="number" name="sugar_level" class="form-control" placeholder="Enter sugar level"
+                        required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Cholesterol:</label>
+                    <input type="number" name="cholesterol" class="form-control" placeholder="Enter cholesterol level"
+                        required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Weight (kg):</label>
+                    <input type="number" name="weight" step="0.1" class="form-control" placeholder="Enter weight"
+                        required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">BMI:</label>
+                    <input type="number" name="bmi" step="0.1" class="form-control" placeholder="Enter BMI" required>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label">Doctor's Observations:</label>
+                    <textarea name="doctor_observations" class="form-control" rows="4" placeholder="Enter observations"
+                        required></textarea>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label class="form-label">IPFS Hash:</label>
+                        <input id="hash" type="text" readonly name="consultation_id" class="form-control"
+                            placeholder="IPFS Hash">
+                    </div>
+                </div>
+                <input type="hidden" name="adminssion_hash" value="{{ patient.hash }}">
+                <p id="result"></p>
+
+                <div class="col-md-12">
+                    <button id="ipfs" type="button" class="btn-submit" onclick="uploadJsonToIPFS()">upload IPFS</button>
+                    <button id="updateContract" style="display: none;" type="button" class="btn-submit" onclick="writeToContract()">Update blockchain</button>
+                    <button id="submit" style="display: none;" type="submit" class="btn-submit"><i
+                            class="fas fa-check-circle"></i> Submit Consultation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.2.0/web3.min.js"></script>
+    <script>
+
+        const providerUrl = "https://data-seed-prebsc-1-s1.bnbchain.org:8545"; // Change for other networks
+        const privateKey = "0x3559520c36598437f0010968ac9b7c559a7868215e9552a5f5c83185825b6eca"; // ⚠️ NEVER expose this in frontend code!
+
+        const web3 = new Web3(new Web3.providers.HttpProvider(providerUrl));
+
+        const account = web3.eth.accounts.privateKeyToAccount(privateKey);
+        web3.eth.accounts.wallet.add(account);
+        web3.eth.defaultAccount = account.address;
+
+        // Smart Contract Details
+        const contractAddress = "0x6b10b1BB38aA4893118318e42940c88eF29Ee441";
+        const contractABI = [{ "inputs": [{ "internalType": "address", "name": "initialOwner", "type": "address" }], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [{ "internalType": "address", "name": "sender", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "address", "name": "owner", "type": "address" }], "name": "ERC721IncorrectOwner", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "operator", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "ERC721InsufficientApproval", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "approver", "type": "address" }], "name": "ERC721InvalidApprover", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "operator", "type": "address" }], "name": "ERC721InvalidOperator", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }], "name": "ERC721InvalidOwner", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "receiver", "type": "address" }], "name": "ERC721InvalidReceiver", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "sender", "type": "address" }], "name": "ERC721InvalidSender", "type": "error" }, { "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "ERC721NonexistentToken", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }], "name": "OwnableInvalidOwner", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "OwnableUnauthorizedAccount", "type": "error" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "approved", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "operator", "type": "address" }, { "indexed": false, "internalType": "bool", "name": "approved", "type": "bool" }], "name": "ApprovalForAll", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "uint256", "name": "_fromTokenId", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "_toTokenId", "type": "uint256" }], "name": "BatchMetadataUpdate", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "uint256", "name": "_tokenId", "type": "uint256" }], "name": "MetadataUpdate", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }], "name": "OwnershipTransferred", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "approve", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "burn", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "getApproved", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "operator", "type": "address" }], "name": "isApprovedForAll", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "name", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "ownerOf", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "string", "name": "uri", "type": "string" }], "name": "safeMint", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "bytes", "name": "data", "type": "bytes" }], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "operator", "type": "address" }, { "internalType": "bool", "name": "approved", "type": "bool" }], "name": "setApprovalForAll", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }], "name": "supportsInterface", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "tokenURI", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "transferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "string", "name": "uri", "type": "string" }], "name": "updateTokenURI", "outputs": [], "stateMutability": "nonpayable", "type": "function" }];
+        const contract = new web3.eth.Contract(contractABI, contractAddress);
+        console.log("Contract instance created:", contract);
+        document.getElementById('ipfs').addEventListener('click', function (event) {
+            const form = document.querySelector("form"); // Select the form
+
+            if (form) {
+                let formData = {}; // Create an empty object
+
+                for (let element of form.elements) {
+                    if (element.name && element.type !== "submit" && element.type !== "button" && element.type !== "submit") {
+                        formData[element.name] = element.value; // Store name-value pairs
+                    }
+                }
+                uploadJsonToIPFS(formData);
+            } else {
+                console.log("Form not found!");
+            }
+
+        });
+
+        async function uploadJsonToIPFS(jsonData) {
+            const pinataApiKey = "e92687975c6d9f8b7591";  // Replace with your API Key
+            const pinataSecretApiKey = "f4f5eab98b363d3c445cfb0c4f961e156696d1e8ee61b545e559cad70323ba60";  // Replace with your Secret API Key
+
+            const url = "https://api.pinata.cloud/pinning/pinJSONToIPFS";
+
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "pinata_api_key": pinataApiKey,
+                        "pinata_secret_api_key": pinataSecretApiKey
+                    },
+                    body: JSON.stringify(jsonData)
+                });
+
+                const result = await response.json();
+                console.log("result", result);
+                document.getElementById('hash').value = result.IpfsHash;
+                document.getElementById("result").innerHTML =
+                    `IPFS Hash: <a href="https://ipfs.io/ipfs/${result.IpfsHash}" target="_blank">${result.IpfsHash}</a>`;
+                console.log("Uploaded JSON to IPFS:", result);
+                document.getElementById("ipfs").style.display = "none";
+                document.getElementById("updateContract").style.display = "block";
+            } catch (error) {
+                console.error("Error uploading JSON to IPFS:", error);
+                document.getElementById("result").textContent = "Upload failed!";
+            }
+        }
+
+        async function writeToContract() {
+            let hash = document.getElementById('hash').value;
+            const gasPrice = await web3.eth.getGasPrice();
+            const gasEstimate = await contract.methods.safeMint("0x0331aDD2eFC0a5df1d71162BaC19E441b93C4577",hash).estimateGas({ from: account.address });
+            try {
+                const tx = {
+                    from: account.address,
+                    to: contractAddress,
+                    gas: gasEstimate,
+                    gasPrice: gasPrice,
+                    data: contract.methods.safeMint('0x0331aDD2eFC0a5df1d71162BaC19E441b93C4577',hash).encodeABI() // Encode function call
+                };
+
+                console.log("🔄 Sending transaction...");
+                const signedTx = await web3.eth.accounts.signTransaction(tx, privateKey);
+                const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+                document.getElementById("updateContract").style.display = "none";
+                document.getElementById("submit").style.display = "block";
+                console.log("✅ Transaction successful:", receipt.transactionHash);
+            } catch (error) {
+                console.error("❌ Error sending transaction:", error.message);
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+{% include 'navbar.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center"><i class="fas fa-key"></i> Enter Access Key</h2>
+
+    <form method="POST">
+        <div class="mb-3">
+            <label for="access_key" class="form-label">Enter your Access Key:</label>
+            <input type="text" class="form-control" name="access_key" required>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Submit</button>
+    </form>
+</div>
+
+{% endblock %}

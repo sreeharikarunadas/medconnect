@@ -1,0 +1,219 @@
+{% include 'navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Patient Details</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        h2 {
+            font-size: 26px;
+            font-weight: 600;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .card p {
+            font-size: 14px;
+            margin: 0;
+            color: #0266bd;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .consult-btn {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff4757);
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container mt-4">
+        <h2><i class="fas fa-user-md"></i> Patient Admission Details</h2>
+        <div class="row" id="patient_search">
+            <div class="col-md-12">
+                <label>Enter patient hash</label>
+                <input type="text" class="form-control" id="patient_hash" name="hash" placeholder="Enter patient hash">
+            </div>
+            <div class="col-md-12 mt-3">
+                <button class="btn btn-primary" onclick="search_patient()" id="search_patient">Search Patient</button>
+            </div>
+
+        </div>
+        <!-- Grid Layout for Patient Details -->
+        <div id="patient_data" style="display: none;">
+            <div class="grid-container">
+                <div class="card">
+                    <h3>Name</h3>
+                    <p>{{ patient.name }}</p>
+                </div>
+                <div class="card">
+                    <h3>Date of Birth</h3>
+                    <p>{{ patient.dob }}</p>
+                </div>
+                <div class="card">
+                    <h3>Age</h3>
+                    <p>{{ patient.age }}</p>
+                </div>
+                <div class="card">
+                    <h3>Height</h3>
+                    <p>{{ patient.height }} cm</p>
+                </div>
+                <div class="card">
+                    <h3>Weight</h3>
+                    <p>{{ patient.weight }} kg</p>
+                </div>
+                <div class="card">
+                    <h3>Marital Status</h3>
+                    <p>{{ patient.marital_status }}</p>
+                </div>
+                <div class="card">
+                    <h3>Referring Doctor</h3>
+                    <p>{{ patient.referring_doctor }}</p>
+                </div>
+                <div class="card">
+                    <h3>Last Exam Date</h3>
+                    <p>{{ patient.last_exam }}</p>
+                </div>
+                <div class="card">
+                    <h3>Medical Problems</h3>
+                    <p>{{ patient.medical_problems }}</p>
+                </div>
+                <div class="card">
+                    <h3>Allergies</h3>
+                    <p>{{ patient.allergies }}</p>
+                </div>
+                <div class="card">
+                    <h3>Current Medications</h3>
+                    <p>{{ patient.medications }}</p>
+                </div>
+                <div class="card">
+                    <h3>Past Medical History</h3>
+                    <p>{{ patient.medical_history }}</p>
+                </div>
+                <div class="card">
+                    <h3>Smoking</h3>
+                    <p>{{ patient.smoking }}</p>
+                </div>
+                <div class="card">
+                    <h3>Alcohol Consumption</h3>
+                    <p>{{ patient.alcohol }}</p>
+                </div>
+            </div>
+            <input type="hidden" id="patient_hash_data" value="{{ patient.hash }}">
+            <!-- Buttons -->
+            <div class="buttons">
+                <a href="{{ url_for('consultation_form', patient_id=patient._id) }}" class="button consult-btn">
+                    <i class="fas fa-user-md"></i> Consult
+                </a>
+                <a href="{{ url_for('patients_for_review') }}" class="button back-btn">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function search_patient() {
+            const patientHash = document.getElementById('patient_hash').value;
+            const patientHashData = document.getElementById('patient_hash_data').value;
+            if (patientHash) {
+                if (patientHash == patientHashData) {
+                    document.querySelector('#patient_data').style.display = 'block';
+                    document.querySelector('#patient_search').style.display = 'none';
+                } else {
+                    alert('Patient not found');
+                }
+            } else {
+                alert('Please enter a patient hash');
+            }
+        }
+    </script>
+</body>
+
+</html>

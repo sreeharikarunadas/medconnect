@@ -1,0 +1,30 @@
+{% include 'navbar.html' %}
+
+
+<div class="container mt-4">
+    <h2><i class="fas fa-file-medical"></i> Diagnostic Report</h2>
+
+    <h3><i class="fas fa-key"></i> Report Access Key</h3>
+    <div class="alert alert-info">
+        <strong>Access Key:</strong> <span id="access-key">{{ access_key }}</span>
+        <button class="btn btn-sm btn-primary" onclick="copyAccessKey()"><i class="fas fa-copy"></i> Copy</button>
+    </div>
+
+    <script>
+        function copyAccessKey() {
+            let key = document.getElementById("access-key").innerText;
+            navigator.clipboard.writeText(key).then(() => {
+                alert("Access key copied!");
+            }).catch(err => {
+                console.error("Error copying access key:", err);
+            });
+        }
+    </script>
+
+    <h3>Report File</h3>
+    {% if report_file %}
+        <img src="{{ url_for('static', filename='reports/' + report_file) }}" class="img-fluid">
+    {% else %}
+        <p>No report available.</p>
+    {% endif %}
+</div>

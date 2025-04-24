@@ -1,0 +1,231 @@
+{% include 'navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+
+    <!-- Bootstrap & Custom Styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Navbar Fix */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+        }
+
+        /* Main Booking Section */
+        .booking-container {
+            display: flex;
+            width: 90%;
+            max-width: 1000px;
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* Left Section (Info) */
+        .booking-info {
+            width: 40%;
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .booking-info h2 {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .booking-info p {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
+        /* Right Section (Form) */
+        .booking-form {
+            width: 60%;
+            padding: 40px;
+        }
+
+        .booking-form h3 {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-group label {
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            transform: translateY(-50%);
+            background: #fff;
+            padding: 0 5px;
+            font-size: 14px;
+            color: #777;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus {
+            border-color: #4facfe;
+            box-shadow: 0 0 5px rgba(79, 172, 254, 0.5);
+        }
+
+        .form-group input:focus + label,
+        .form-group select:focus + label,
+        .form-group input:not(:placeholder-shown) + label,
+        .form-group select:not(:placeholder-shown) + label {
+            top: 5px;
+            font-size: 12px;
+            color: #4facfe;
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: #fff;
+            padding: 12px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: scale(1.05);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="booking-container">
+    <!-- Left Section (Info) -->
+    <div class="booking-info">
+        <h2><i class="fas fa-calendar-check"></i> Book Your Appointment</h2>
+        <p>Choose a doctor and time slot that fits your schedule.</p>
+    </div>
+
+    <!-- Right Section (Form) -->
+    <div class="booking-form">
+        <h3>Appointment Form</h3>
+
+        <form method="POST">
+            <!-- Specialization -->
+            <div class="form-group">
+                <select id="specialization" name="specialization" required onchange="filterDoctors()">
+                    <option value="" disabled selected></option>
+                    {% for spec in specializations %}
+                        <option value="{{ spec }}">{{ spec }}</option>
+                    {% endfor %}
+                </select>
+                <label>Specialization</label>
+            </div>
+
+            <!-- Doctor Selection -->
+            <div class="form-group">
+                <select id="doctor" name="doctor" required>
+                    <option value="" disabled selected></option>
+                    {% for doctor in doctors %}
+                        <option value="{{ doctor.username }}" data-specialization="{{ doctor.specialization }}">
+                            Dr. {{ doctor.username }} ({{ doctor.specialization }})
+                        </option>
+                    {% endfor %}
+                </select>
+                <label>Doctor</label>
+            </div>
+
+            <!-- Appointment Date -->
+            <div class="form-group">
+                <input type="date" name="date" required placeholder=" ">
+                <label>Appointment Date</label>
+            </div>
+
+            <!-- Appointment Time -->
+            <div class="form-group">
+                <input type="time" name="time" required placeholder=" ">
+                <label>Time</label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-submit"><i class="fas fa-calendar-alt"></i> Book Now</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function filterDoctors() {
+        let specialization = document.getElementById("specialization").value;
+        let doctorSelect = document.getElementById("doctor");
+
+        for (let option of doctorSelect.options) {
+            if (option.dataset.specialization === specialization || option.value === "") {
+                option.style.display = "block";
+            } else {
+                option.style.display = "none";
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

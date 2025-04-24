@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diagnostic Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1 { text-align: center; }
+        .report-section { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Diagnostic Report</h1>
+    {% for key, value in report.items() %}
+        {% if key not in ["_id", "username"] %}
+            <div class="report-section"><strong>{{ key.replace('_', ' ').title() }}:</strong> {{ value }}</div>
+        {% endif %}
+    {% endfor %}
+</body>
+</html>

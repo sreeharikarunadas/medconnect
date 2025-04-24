@@ -1,0 +1,471 @@
+{% include 'navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Admission Form</title>
+
+    <!-- Bootstrap & FontAwesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 80px;
+        }
+
+        /* Navbar Fix */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+        }
+
+        /* Glassmorphic Form Container */
+        .form-container {
+            width: 90%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-in-out;
+            margin-top: 20px;
+        }
+
+        /* Form Title */
+        .form-container h1 {
+            font-size: 26px;
+            font-weight: 600;
+            text-align: center;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        /* Labels */
+        label {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* Input Fields */
+        .form-control,
+        .form-select {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #4facfe;
+            box-shadow: 0 0 8px rgba(79, 172, 254, 0.5);
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: #fff;
+            padding: 12px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: scale(1.05);
+        }
+
+        /* Fade-In Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container d-flex align-items-center justify-content-center">
+        <div class="form-container">
+            <h1><i class="fas fa-user-plus"></i> Patient Admission Form</h1>
+
+            <form method="POST" class="row g-3">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Name:</label>
+                        <input type="text" name="name" class="form-control" placeholder="Enter full name" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Date of Birth:</label>
+                        <input type="date" name="dob" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label">Age:</label>
+                        <input type="number" name="age" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Gender:</label>
+                        <select name="gender" class="form-select" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Marital Status:</label>
+                        <select name="marital_status" class="form-select" required>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Divorced">Divorced</option>
+                            <option value="Widowed">Widowed</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Aadhaar Number:</label>
+                            <input type="text" name="aadhaar_number" class="form-control"
+                                placeholder="Enter Aadhaar Number" required>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Height (cm):</label>
+                        <input type="number" name="height" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Weight (kg):</label>
+                        <input type="number" name="weight" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Referring Doctor:</label>
+                        <input type="text" name="referring_doctor" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Last Physical Exam Date:</label>
+                        <input type="date" name="last_exam" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label">Medical Problems:</label>
+                    <textarea name="medical_problems" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label">Allergies:</label>
+                    <textarea name="allergies" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label">Current Medications:</label>
+                    <textarea name="medications" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label">Family Medical History:</label>
+                    <textarea name="medical_history" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Do you smoke?</label>
+                        <select name="smoking" class="form-select">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Alcohol Consumption:</label>
+                        <select name="alcohol" class="form-select">
+                            <option value="Never">Never</option>
+                            <option value="Occasionally">Occasionally</option>
+                            <option value="Regularly">Regularly</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Do you have health insurance?</label>
+                        <select name="has_insurance" id="has_insurance" class="form-select" required
+                            onchange="toggleInsuranceFields()">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="insurance_fields" style="display: none;">
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Insurance Company Name:</label>
+                            <input type="text" name="insurance_company" id="insurance_company" class="form-control"
+                                placeholder="Enter Insurance Company">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Insurance ID:</label>
+                            <input type="text" name="insurance_id" id="insurance_id" class="form-control"
+                                placeholder="Enter Insurance ID">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label class="form-label">IPFS Hash:</label>
+                        <input id="hash" type="text" readonly name="hash_id" class="form-control" placeholder="IPFS Hash" >
+                    </div>
+                </div>
+
+                <p id="result"></p>
+
+                <div class="col-md-12">
+                    <button id="ipfs" type="button" class="btn-submit" onclick="uploadJsonToIPFS()">upload IPFS</button>
+                    <button id="submit" style="display: none;" type="submit" class="btn-submit"><i
+                            class="fas fa-check-circle"></i>
+                        Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function validateForm(event) {
+            let isValid = true;
+
+            // Get form fields
+            let name = document.getElementsByName("name")[0].value.trim();
+            let dob = document.getElementsByName("dob")[0].value;
+            let age = document.getElementsByName("age")[0].value;
+            let gender = document.getElementsByName("gender")[0].value;
+            let marital_status = document.getElementsByName("marital_status")[0].value;
+            let aadhaar_number = document.getElementsByName("aadhaar_number")[0].value.trim();
+            let height = document.getElementsByName("height")[0].value;
+            let weight = document.getElementsByName("weight")[0].value;
+            let referring_doctor = document.getElementsByName("referring_doctor")[0].value.trim();
+            let smoking = document.getElementsByName("smoking")[0].value;
+            let alcohol = document.getElementsByName("alcohol")[0].value;
+            let has_insurance = document.getElementById("has_insurance").value;
+            let insurance_company = document.getElementById("insurance_company").value.trim();
+            let insurance_id = document.getElementById("insurance_id").value.trim();
+
+            // Textarea fields
+            let hash_id = document.getElementsByName("hash_id")[0].value.trim();
+            let medical_problems = document.getElementsByName("medical_problems")[0].value.trim();
+            let allergies = document.getElementsByName("allergies")[0].value.trim();
+            let medications = document.getElementsByName("medications")[0].value.trim();
+            let medical_history = document.getElementsByName("medical_history")[0].value.trim();
+
+            // Name validation
+            if (name === "") {
+                alert("Please enter the patient's full name.");
+                isValid = false;
+            }
+
+            // Date of Birth validation
+            if (dob === "") {
+                alert("Please enter the patient's date of birth.");
+                isValid = false;
+            }
+
+            // Age validation (must be between 0 and 120)
+            if (age === "" || age < 0 || age > 120) {
+                alert("Please enter a valid age (0-120).");
+                isValid = false;
+            }
+
+            // Aadhaar Number validation (12-digit numeric)
+            let aadhaarRegex = /^\d{12}$/;
+            if (!aadhaarRegex.test(aadhaar_number)) {
+                alert("Please enter a valid 12-digit Aadhaar number.");
+                isValid = false;
+            }
+
+            // Height validation (must be positive)
+            if (height === "" || height <= 0) {
+                alert("Please enter a valid height.");
+                isValid = false;
+            }
+
+            // Weight validation (must be positive)
+            if (weight === "" || weight <= 0) {
+                alert("Please enter a valid weight.");
+                isValid = false;
+            }
+
+            // Referring doctor validation
+            if (referring_doctor === "") {
+                alert("Please enter the referring doctor's name.");
+                isValid = false;
+            }
+
+            // Ensure medical problem details are provided
+            if (medical_problems === "") {
+                alert("Please describe any medical problems.");
+                isValid = false;
+            }
+
+            // Ensure allergies, if any, are mentioned
+            if (allergies === "") {
+                alert("Please enter allergy details or 'None' if no allergies.");
+                isValid = false;
+            }
+
+            // Ensure medication details are provided
+            if (medications === "") {
+                alert("Please list current medications or 'None' if none.");
+                isValid = false;
+            }
+
+            // Ensure medical history is provided
+            if (medical_history === "") {
+                alert("Please enter family medical history.");
+                isValid = false;
+            }
+
+            // Insurance validation (only if selected)
+            if (has_insurance === "Yes") {
+                if (insurance_company === "") {
+                    alert("Please enter the insurance company name.");
+                    isValid = false;
+                }
+                if (insurance_id === "") {
+                    alert("Please enter the insurance ID.");
+                    isValid = false;
+                }
+            }
+
+            if (!isValid) {
+                console.log('event',event)
+                // event.preventDefault(); // Prevent form submission if invalid                  
+            }
+
+            return false
+        }
+
+        function toggleInsuranceFields() {
+            var insuranceSection = document.getElementById("insurance_fields");
+            var hasInsurance = document.getElementById("has_insurance").value;
+
+            if (hasInsurance === "Yes") {
+                insuranceSection.style.display = "block";
+            } else {
+                insuranceSection.style.display = "none";
+            }
+        }
+
+        // Attach validation on form submission
+        document.querySelector("form").addEventListener("submit", validateForm);
+    </script>
+    <script>
+        async function uploadJsonToIPFS() {
+            const pinataApiKey = "e92687975c6d9f8b7591";  // Replace with your API Key
+            const pinataSecretApiKey = "f4f5eab98b363d3c445cfb0c4f961e156696d1e8ee61b545e559cad70323ba60";  // Replace with your Secret API Key
+
+            const url = "https://api.pinata.cloud/pinning/pinJSONToIPFS";
+
+            // Get form fields
+            let name = document.getElementsByName("name")[0].value.trim();
+            let dob = document.getElementsByName("dob")[0].value;
+            let age = document.getElementsByName("age")[0].value;
+            let gender = document.getElementsByName("gender")[0].value;
+            let marital_status = document.getElementsByName("marital_status")[0].value;
+            let aadhaar_number = document.getElementsByName("aadhaar_number")[0].value.trim();
+            let height = document.getElementsByName("height")[0].value;
+            let weight = document.getElementsByName("weight")[0].value;
+            let referring_doctor = document.getElementsByName("referring_doctor")[0].value.trim();
+            let smoking = document.getElementsByName("smoking")[0].value;
+            let alcohol = document.getElementsByName("alcohol")[0].value;
+            let has_insurance = document.getElementById("has_insurance").value;
+            let insurance_company = document.getElementById("insurance_company").value.trim();
+            let insurance_id = document.getElementById("insurance_id").value.trim();
+
+            // Textarea fields
+            let medical_problems = document.getElementsByName("medical_problems")[0].value.trim();
+            let allergies = document.getElementsByName("allergies")[0].value.trim();
+            let medications = document.getElementsByName("medications")[0].value.trim();
+            let medical_history = document.getElementsByName("medical_history")[0].value.trim();
+
+            let jsonData = {
+                name,
+                dob,
+                age,
+                gender,
+                marital_status,
+                aadhaar_number,
+                height,
+                weight,
+                referring_doctor,
+                smoking,
+                alcohol,
+                has_insurance,
+                insurance_company,
+                insurance_id,
+                medical_problems,
+                allergies,
+                medications,
+                medical_history,
+            }
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "pinata_api_key": pinataApiKey,
+                        "pinata_secret_api_key": pinataSecretApiKey
+                    },
+                    body: JSON.stringify(jsonData)
+                });
+
+                const result = await response.json();
+                console.log("result", result)
+                document.getElementById('hash').value =   result.IpfsHash ;
+                document.getElementById("result").innerHTML =
+                    `IPFS Hash: <a href="https://ipfs.io/ipfs/${result.IpfsHash}" target="_blank">${result.IpfsHash}</a>`;
+                console.log("Uploaded JSON to IPFS:", result);
+                document.getElementById("ipfs").style.display = "none";
+                document.getElementById("submit").style.display = "block";
+            } catch (error) {
+                console.error("Error uploading JSON to IPFS:", error);
+                document.getElementById("result").textContent = "Upload failed!";
+            }
+        }
+    </script>
+</body>
+
+</html>
